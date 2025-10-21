@@ -104,12 +104,12 @@ function App() {
   if (error) return <div role="alert">Error</div>;
 
   return (
-    <div className="fpx-4 text-black">
-      <div className="mb-2">
+    <div className="flex flex-col px-4 text-black">
+      <div className="flex flex-col mb-2">
         <h1 className="ml-4 mt-4 mb-2 text-2xl font-semibold">Tickets</h1>
 
         {/* TODO: filter input */}
-        <label className="ml-4 mt-4 text-lg font-semibold">
+        <label className="ml-4 mb-2 text-lg font-semibold">
           Search
           <input
             value={q}
@@ -121,7 +121,7 @@ function App() {
           />
         </label>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row space-x-5">
         {/* TODO: list with empty state */}
         {filtered.length > 0 ? (
           <div className="flex flex-col w-full ml-8">
@@ -131,7 +131,6 @@ function App() {
                   <div className="flex">{i.title}</div>
                   <div className="flex">{i.status}</div>
                   <div className="flex">{i.assignee}</div>
-                  <div className="flex">{i.updatedAt}</div>
                 </li>
               </div>
             ))}
@@ -146,6 +145,9 @@ function App() {
             {selected ? (
               <div className="flex flex-col h-full">
                 <div className="flex">{selected?.title}</div>
+                <div>
+                  Updated: {new Date(selected.updatedAt).toLocaleString()}
+                </div>
 
                 <div className="mt-auto flex flex-row items-center text-sm gap-2 pt-2">
                   <button
