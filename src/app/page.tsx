@@ -1,67 +1,48 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-
-type TicketStatus = "new" | "in_review" | "approved" | "rejected";
-type Ticket = {
-  id: string;
-  title: string;
-  status: TicketStatus;
-  assignee?: string | null;
-  updatedAt: string;
-};
-
-const seed: Ticket[] = [
-  {
-    id: "1",
-    title: "Onboard Acme Inc",
-    status: "new",
-    assignee: null,
-    updatedAt: "2025-10-18T12:00:00Z",
-  },
-  {
-    id: "2",
-    title: "SAML setup for Globex",
-    status: "in_review",
-    assignee: "jane",
-    updatedAt: "2025-10-18T14:10:00Z",
-  },
-  {
-    id: "3",
-    title: "Billing discrepancy Q4",
-    status: "new",
-    assignee: null,
-    updatedAt: "2025-10-17T09:30:00Z",
-  },
-  {
-    id: "4",
-    title: "Role mapping audit",
-    status: "approved",
-    assignee: "mark",
-    updatedAt: "2025-10-16T16:45:00Z",
-  },
-  {
-    id: "5",
-    title: "Quota increase request",
-    status: "rejected",
-    assignee: null,
-    updatedAt: "2025-10-16T08:20:00Z",
-  },
-];
-
-let db = [...seed];
+import { Ticket } from "./types/types";
+import { seed } from "./api/tickets";
 
 function delay(ms: number) {
   return new Promise<void>((res) => setTimeout(res, ms));
 }
 
+async function fetchTickets(): Promise<Ticket[]> {
+  await delay(400);
+  // add loading status, error handling
+  console.log("running fetch tickets", seed);
+  return seed;
+}
+
 function App() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [list, setList] = useState<Ticket[] | null>(null);
+
   // STATE
 
   // EFFECT: load tickets
-  useEffect(() => {}, []);
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    setList(null);
+    setError("");
+    fetchTickets()
+      .then((d) => {
+        if (alive) setList(d);
+      })
+      .catch((e) => {
+        if (alive) setError(e);
+      });
 
-  console.log("db ==> ", db);
+    //error handling and loading
+    //list needs to go in state
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // FILTERED VIEW
 
