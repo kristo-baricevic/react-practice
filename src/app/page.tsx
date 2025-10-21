@@ -22,7 +22,9 @@ function App() {
   const [selected, setSelected] = useState<Ticket | null>(null);
   const [assigned, setAssigned] = useState<string>("");
   const [status, setStatus] = useState<string>("");
-  const [busyId, setBusyId] = useState<string>("");
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [actionPerformed, setActionPerformed] = useState<string | null>(null);
+
   const [notice, setNotice] = useState<{ msg: string; kind: "ok" | "err" }>({
     msg: "",
     kind: "ok",
@@ -76,6 +78,7 @@ function App() {
     successMsg: string
   ) {
     if (!list) return;
+    setActionPerformed(`${id}`);
     setNotice({ msg: "", kind: "ok" });
     setBusyId(id);
 
@@ -95,7 +98,7 @@ function App() {
         setSelected(prev.find((t) => t.id === id) || null);
       setNotice({ msg: String(e.message || e), kind: "err" });
     } finally {
-      setBusyId("");
+      setBusyId(null);
     }
   }
 
@@ -126,7 +129,13 @@ function App() {
         {filtered.length > 0 ? (
           <div className="flex flex-col w-full ml-8">
             {filtered.map((i) => (
-              <div key={i.id} onClick={() => setSelected(i)}>
+              <div
+                key={i.id}
+                onClick={() => {
+                  setActionPerformed(null);
+                  setSelected(i);
+                }}
+              >
                 <li className="flex flex-col mb-4 max-w-md bg-amber-100 rounded-xl text-black p-4">
                   <div className="flex">{i.title}</div>
                   <div className="flex">{i.status}</div>
@@ -136,7 +145,11 @@ function App() {
             ))}
           </div>
         ) : (
-          <>No results 😢😢😢😢😢😢😢😢 </>
+          <div className="flex flex-col w-full ml-8">
+            <li className="flex flex-col mb-4 max-w-md bg-amber-100 rounded-xl text-black p-4">
+              No results 😢😢😢😢😢😢😢😢
+            </li>
+          </div>
         )}
         <div className="flex flex-col ">
           <div className="bg-amber-300 max-h-48 w-[300px] rounded-2xl flex flex-col mr-12 mb-4 p-4">
@@ -195,13 +208,20 @@ function App() {
           </div>
 
           {/* TODO: success/error notice */}
-          <div
-            className="flex bg-amber-200 h-[100px] w-[300px] p-8 rounded-2xl justify-center"
-            role={notice.kind === "err" ? "alert" : undefined}
-            aria-live="polite"
-          >
-            {notice.msg ? <div>{notice.msg}</div> : <div></div>}
-          </div>
+          {actionPerformed &&
+            (!busyId ? (
+              <div
+                className="flex bg-amber-200 h-[100px] w-[300px] p-8 rounded-2xl justify-center"
+                role={notice.kind === "err" ? "alert" : undefined}
+                aria-live="polite"
+              >
+                {notice.msg ? <div>{notice.msg}</div> : <div></div>}
+              </div>
+            ) : (
+              <div className="flex bg-amber-200 h-[100px] w-[300px] p-8 rounded-2xl justify-center">
+                Loading...
+              </div>
+            ))}
         </div>
       </div>
     </div>
