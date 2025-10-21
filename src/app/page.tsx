@@ -20,8 +20,6 @@ function App() {
   const [error, setError] = useState<string>("");
   const [list, setList] = useState<Ticket[] | null>(null);
   const [selected, setSelected] = useState<Ticket | null>(null);
-  const [assigned, setAssigned] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [actionPerformed, setActionPerformed] = useState<string | null>(null);
 
@@ -181,8 +179,6 @@ function App() {
                         { status: "rejected" },
                         "Rejected"
                       );
-
-                      setStatus("rejected");
                     }}
                   >
                     Reject
