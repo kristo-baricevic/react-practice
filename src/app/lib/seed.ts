@@ -1,5 +1,4 @@
 import { Ticket } from "../types/types";
-import type { NextApiRequest, NextApiResponse } from 'next';
 
 export const seed: Ticket[] = [
     {
@@ -38,8 +37,3 @@ export const seed: Ticket[] = [
       updatedAt: "2025-10-16T08:20:00Z",
     },
   ];
-
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json(seed);
-}
