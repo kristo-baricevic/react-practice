@@ -139,62 +139,68 @@ function App() {
         ) : (
           <>No results 😢😢😢😢😢😢😢😢 </>
         )}
-        <div className="bg-amber-300 max-h-48 w-[300px] rounded-2xl flex flex-col mr-12 mb-4 p-4">
-          <h2 className="flex">Details</h2>
-          {/* TODO: details panel w/ actions */}
-          {selected ? (
-            <div className="flex flex-col h-full">
-              <div className="flex">{selected?.title}</div>
+        <div className="flex flex-col ">
+          <div className="bg-amber-300 max-h-48 w-[300px] rounded-2xl flex flex-col mr-12 mb-4 p-4">
+            <h2 className="flex">Details</h2>
+            {/* TODO: details panel w/ actions */}
+            {selected ? (
+              <div className="flex flex-col h-full">
+                <div className="flex">{selected?.title}</div>
 
-              <div className="mt-auto flex flex-row items-center text-sm gap-2 pt-2">
-                <button
-                  disabled={busyId === selected.id}
-                  className="items-center h-full flex px-2 py-0.5 cursor-pointer bg-slate-200 hover:bg-slate-300 rounded-2xl border-2 border-slate-400"
-                  onClick={() =>
-                    runAction(selected.id, { status: "approved" }, "Approved")
-                  }
-                >
-                  Approve
-                </button>
-                <button
-                  disabled={busyId === selected.id}
-                  className="items-center h-full flex px-2 py-0.5 cursor-pointer bg-slate-200 hover:bg-slate-300 rounded-2xl border-2 border-slate-400"
-                  onClick={() => {
-                    runAction(selected.id, { status: "rejected" }, "Rejected");
+                <div className="mt-auto flex flex-row items-center text-sm gap-2 pt-2">
+                  <button
+                    disabled={busyId === selected.id}
+                    className="items-center h-full flex px-2 py-0.5 cursor-pointer bg-slate-200 hover:bg-slate-300 rounded-2xl border-2 border-slate-400"
+                    onClick={() =>
+                      runAction(selected.id, { status: "approved" }, "Approved")
+                    }
+                  >
+                    Approve
+                  </button>
+                  <button
+                    disabled={busyId === selected.id}
+                    className="items-center h-full flex px-2 py-0.5 cursor-pointer bg-slate-200 hover:bg-slate-300 rounded-2xl border-2 border-slate-400"
+                    onClick={() => {
+                      runAction(
+                        selected.id,
+                        { status: "rejected" },
+                        "Rejected"
+                      );
 
-                    setStatus("rejected");
-                  }}
-                >
-                  Reject
-                </button>
-                <button
-                  disabled={busyId === selected.id}
-                  className="items-center h-full flex px-2 py-0.5 cursor-pointer bg-slate-200 hover:bg-slate-300 rounded-2xl border-2 border-slate-400"
-                  onClick={() =>
-                    runAction(
-                      selected.id,
-                      { assignee: "me" },
-                      "Assigned to you"
-                    )
-                  }
-                >
-                  Assign to Me
-                </button>
+                      setStatus("rejected");
+                    }}
+                  >
+                    Reject
+                  </button>
+                  <button
+                    disabled={busyId === selected.id}
+                    className="items-center h-full flex px-2 py-0.5 cursor-pointer bg-slate-200 hover:bg-slate-300 rounded-2xl border-2 border-slate-400"
+                    onClick={() =>
+                      runAction(
+                        selected.id,
+                        { assignee: "me" },
+                        "Assigned to you"
+                      )
+                    }
+                  >
+                    Assign to Me
+                  </button>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="flex">Select a ticket</div>
-          )}
-        </div>
-        {/* TODO: success/error notice */}
-        {notice.msg && (
+            ) : (
+              <div className="flex">Select a ticket</div>
+            )}
+          </div>
+
+          {/* TODO: success/error notice */}
           <div
+            className="flex bg-amber-200 h-[100px] w-[300px] p-8 rounded-2xl justify-center"
             role={notice.kind === "err" ? "alert" : undefined}
             aria-live="polite"
           >
-            {notice.msg}
+            {notice.msg ? <div>{notice.msg}</div> : <div></div>}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
